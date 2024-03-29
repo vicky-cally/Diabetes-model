@@ -8,10 +8,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MinMaxScaler,StandardScaler
 
 # Load dataset
-dataset = pd.read_csv("diabetes2.csv")
-df = dataset.copy()
+def load_data():
+    dataset = pd.read_csv("diabetes2.csv")
+    df = dataset.copy()
+    return df
 
-def show_explore_page(df):
+df=load_data()
+def show_explore_page():
     st.title("Explore Diabetes Data")
 
     st.write(
@@ -99,4 +102,4 @@ def show_explore_page(df):
     st.pyplot(fig)
 
 # Call the function to show the explore page
-show_explore_page(df)
+#show_explore_page(df)
