@@ -104,7 +104,7 @@ def show_predict_page():
         # Use the loaded model to make predictions
         prediction = model.predict(features)
         # Display the prediction
-        st.write(f"Prediction: {'Diabetes Positive' if prediction[0] == 1 else 'Diabetes Negative'}")
+        st.write(f"Prediction: {'Diabetic' if prediction[0] == 1 else 'Non-Diabetic'}")
 
 # Call the function to show the prediction page
 # show_predict_page()
