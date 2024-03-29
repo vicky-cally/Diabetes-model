@@ -8,7 +8,7 @@ def load_model():
     return data
 
 data = load_model()
-#model = data['model']
+model = data['model']
 
 def show_predict_page():
     # Title with custom styling
