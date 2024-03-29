@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import MinMaxScaler,StandardScaler
 
 # Load dataset
 dataset = pd.read_csv("diabetes2.csv")
@@ -25,13 +27,18 @@ def show_explore_page(df):
         #### Outcome Counts
         """
     )
-    plt.figure(figsize=(6, 4))
-    df['Outcome'].value_counts().plot(kind='bar', color=['green', 'yellow'])
-    plt.title('Outcome Counts')
-    plt.xlabel('Outcome')
-    plt.ylabel('Count')
-    plt.xticks(ticks=[0, 1], labels=[outcome_labels[0], outcome_labels[1]], rotation=0)
-    st.pyplot()
+    fig, ax = plt.subplots(figsize=(6, 4))
+    df['Outcome'].value_counts().plot(kind='bar', color=['green', 'yellow'], ax=ax)
+    ax.set_title('Outcome Counts')
+    ax.set_xlabel('Outcome')
+    ax.set_ylabel('Count')
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels([outcome_labels[0], outcome_labels[1]], rotation=0)
+
+    st.pyplot(fig)
+
+        # Create the Outcome_Label column
+    df['Outcome_Label'] = df['Outcome'].map(outcome_labels)
 
     # Pairplot also indicating the binary classes
     st.write(
@@ -39,10 +46,11 @@ def show_explore_page(df):
         #### Pairplot with Outcome Label
         """
     )
-    df['Outcome_Label'] = df['Outcome'].map(outcome_labels)
-    sns.pairplot(df, hue='Outcome_Label')
-    df = df.drop('Outcome_Label', axis=1)
-    st.pyplot()
+    # Create a Pairplot with the Outcome_Label
+    fig = sns.pairplot(df, hue='Outcome_Label', height=4)
+    st.pyplot(fig)
+
+
 
     # PLotting the correlation matrix
     st.write(
@@ -50,10 +58,20 @@ def show_explore_page(df):
         #### Correlation Matrix
         """
     )
-    plt.figure(figsize=(7, 5))
-    sns.heatmap(df.corr(), annot=True, cmap='viridis', fmt=".2f")
-    plt.title('Correlation Matrix')
-    st.pyplot()
+    # Filter out non-numeric columns
+    numeric_df = df.select_dtypes(include=['number'])
+
+    # Create a figure and axis object
+    fig, ax = plt.subplots(figsize=(7, 5))
+
+    # Plot the heatmap on the axis
+    sns.heatmap(numeric_df.corr(), annot=True, cmap='viridis', fmt=".2f", ax=ax)
+
+    # Set the title
+    ax.set_title('Correlation Matrix')
+
+    # Display the plot using Streamlit
+    st.pyplot(fig)
 
     # Plotting the relationships between some of the features
     st.write(
@@ -61,48 +79,27 @@ def show_explore_page(df):
         #### Scatterplots of Feature Relationships
         """
     )
-    plt.figure(figsize=(20, 15))
+
+    # Plotting the relationships between some of the features
+    fig, ax = plt.subplots(figsize=(20, 15))
+
     plt.subplot(3, 3, 1)
     sns.scatterplot(data=df, x="BMI", y="SkinThickness", hue="Outcome", palette={0: 'seagreen', 1: 'tomato'})
     plt.title('BMI Vs Skinthickness')
+
     plt.subplot(3, 3, 2)
     sns.scatterplot(data=df, x="BloodPressure", y="Age", hue="Outcome", palette={0: 'purple', 1: 'deeppink'})
     plt.title('Age Vs BloodPressure')
+
     plt.subplot(3, 3, 3)
     sns.scatterplot(data=df, x="Glucose", y="Insulin", hue="Outcome", palette={0: 'royalblue', 1: 'darkgoldenrod'})
     plt.title('Insulin Vs Glucose')
-    st.pyplot()
 
-    # Classification report
-    X = df.drop('Outcome', axis=1)
-    y = df['Outcome']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Show the plot using st.pyplot()
+    st.pyplot(fig)
 
-    # Classification report and confusion matrix for KNN classifier (example)
-    st.write(
-        """
-        #### Classification Report and Confusion Matrix for KNN Classifier
-        """
-    )
-    # Add your classification model here and its predictions
-    # For example:
-    model_knn = KNeighborsClassifier(metric='manhattan', n_neighbors=20, weights= 'distance')
-    model_knn.fit(xtrain, ytrain)
-    model_knn_predictions = model_knn.predict(xtest)
+    
 
-    # Classification report
-    report = classification_report(ytest, model_knn_predictions, output_dict=True)
-    sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True, cmap="Pastel1")
-    plt.title("Precision, Recall, F1-Score for the KNN Algorithm")
-    st.pyplot()
-
-    # Confusion matrix
-    conf_matrix_knn = confusion_matrix(ytest, model_knn_predictions)
-    sns.heatmap(conf_matrix_knn, annot=True, fmt='d', cmap='cividis')
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.title('Confusion Matrix for K-Nearest Neighbors Classifier')
-    st.pyplot()
 
 # Call the function to show the explore page
 show_explore_page(df)
