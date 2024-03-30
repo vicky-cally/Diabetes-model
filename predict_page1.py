@@ -3,21 +3,14 @@ import pickle
 import numpy as np
 import os
 
+
 def load_model():
-    model_file = 'classifier_knn.pkl'
-    if not os.path.isfile(model_file):
-        st.error(f"Model file '{model_file}' not found.")
-        return None
+    with open('classifier_knn.pkl', 'rb') as file:
+        data = pickle.load(file)
+    return data
 
-    try:
-        with open(model_file, 'rb') as file:
-            data = pickle.load(file)
-        return data
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
 
-data = load_model()
+data = load_model() 
   
 model = data['model']
 
