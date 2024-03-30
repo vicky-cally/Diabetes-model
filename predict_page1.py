@@ -3,12 +3,10 @@ import pickle
 import numpy as np
 
 def load_model():
-    file_path = r'C:\Users\Admin\classifier_knn.pkl'
-    with open(file_path, 'rb') as file:
-    # Your code to load the model
+    with open(classifier_knn.pkl, 'rb') as file:
         data = pickle.load(file)
-
-
+    return data
+    
 data = load_model()   
 model = data['model']
 
