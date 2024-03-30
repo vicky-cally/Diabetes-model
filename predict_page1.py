@@ -5,7 +5,7 @@ import sklearn
 
 
 def load_model():
-    with open('classifier_knn.pkl', 'rb') as file:
+    with open('classify_knn.pkl', 'rb') as file:
         data = pickle.load(file)
     return data
 
