@@ -7,8 +7,9 @@ def load_model():
         data = pickle.load(file)
     return data
 
-data = load_model()
-#model = data['model']
+
+data = load_model()   
+model = data['model']
 
 def show_predict_page():
     # Title with custom styling
@@ -100,7 +101,7 @@ def show_predict_page():
     # Add a button to trigger prediction
     if st.button("Predict"):
         # Prepare input data as a numpy array
-        features = np.array([[Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,BMI,DiabetesPedigreeFunction,Age]])
+        features = np.array([[pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]])
         # Use the loaded model to make predictions
         prediction = model.predict(features)
         # Display the prediction
