@@ -107,4 +107,4 @@ def show_predict_page():
         st.write(f"Prediction: {'Diabetic' if prediction[0] == 1 else 'Non-Diabetic'}")
 
 # Call the function to show the prediction page
-#show_predict_page()
+show_predict_page()
