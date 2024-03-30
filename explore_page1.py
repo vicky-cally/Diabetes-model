@@ -97,7 +97,7 @@ def show_explore_page():
 
     # Show the plot using st.pyplot()
     st.pyplot(fig)
-show_explore_page()
+
 
 # Call the function to show the explore page
 #show_explore_page(df)
